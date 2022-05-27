@@ -10,7 +10,7 @@ const dbConnection = async () => {
                 useCreateIndex: true*/
             } );
         
-        console.log('MongoDB conetado!');
+        console.log('MongoDB conectado!');
     } catch (eError) {
         console.log(eError);
         throw new Error('Error a la hora de conectarse al MongoDB.');

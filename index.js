@@ -12,7 +12,10 @@ const { dbConnection } = require('./database/config');
 const app = express();
 
 // Configurar CORS!
-app.use(cors())
+app.use( cors() );
+
+// Lectura/Parseo del Body (callAPI)!
+app.use( express.json() );
 
 // Base de Datos!
 dbConnection();
@@ -20,11 +23,14 @@ dbConnection();
 // Rutas!
 app.get( '/', (req, res) => {
     res//.status(400)
-      .json({
+      .json( {
         ok: true,
-        msj: 'Hola Mundo!'
+        msg: 'Hola Mundo!'
       } );
   } );
+
+app.use('/api/usuarios', require('./routes/usuarios') );
+app.use('/api/login', require('./routes/auth') );
 
 app.listen(process.env.ADMINPRO_PORT, () => {
     console.log(`Servidor corriendo en puerto ${process.env.ADMINPRO_PORT}!`);
