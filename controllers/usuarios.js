@@ -3,21 +3,37 @@ const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
 
-const getUsuarios = async (req, res) => {
-    /*const usuarios = await Usuario.find( {}, 'nombre apellido email role google' );*/
-    const usuarios = await Usuario.find();
+const getUsuarios = async (req, res = response) => {
+    const desde = Number(req.query.desde) || 0,
+        limite = Number(req.query.limite) || 1;
 
-    res.json( {
-        ok: true,
-        usuarios,
-        uid: req.uid
-      } );
+    try {
+        const [usuarios, count] = await Promise.all( [
+            /*Usuario.find( {}, 'nombre apellido email role google img' )*/
+            Usuario.find()
+                .skip(desde)
+                .limit(limite),
+            Usuario.countDocuments()
+          ] );
+        res.json( {
+            ok: true,
+            usuarios,
+            count
+        } );
+    } catch (eError) {
+        console.error(eError);
+        res.status(500)
+            .json( {
+                ok: false,
+                msg: 'getUsuarios() - Error!'
+            } );
+    }
 };
 
 const crearUsuario = async (req, res = response) => {
+    const { email, password } = req.body;
+
     try {
-        const { email, password } = req.body;
-        
         const existeEmail = await Usuario.findOne( { email } );
 
         if (existeEmail)
