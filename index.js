@@ -20,6 +20,9 @@ app.use( express.json() );
 // Base de Datos!
 dbConnection();
 
+// Directorio public (levantar la webPage de ese directorio)!
+//app.use( express.static('public') );
+
 // Rutas!
 app.get( '/', (req, res) => {
     res//.status(400)
