@@ -21,7 +21,7 @@ const getUsuarios = async (req, res = response) => {
             count
         } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -62,7 +62,7 @@ const crearUsuario = async (req, res = response) => {
             token
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -83,8 +83,6 @@ const actualizarUsuario = async (req, res = response) => {
                     ok: false,
                     msg: `No se encuentra el Usuario uid=${uid}.`
                 } );
-
-        // TODO: Validar Token y comprobar Usuario correcto!
 
         // Actualizaciones!
         const { password, google, email, ...campos} = req.body;
@@ -110,7 +108,7 @@ const actualizarUsuario = async (req, res = response) => {
             uid
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -132,8 +130,6 @@ const borrarUsuario = async (req, res = response) => {
                     msg: `No se encuentra el Usuario uid=${uid}.`
                 } );
 
-        // TODO: Validar Token y comprobar Usuario correcto!
-
         await Usuario.findByIdAndDelete(uid);
 
         res.json( {
@@ -142,7 +138,7 @@ const borrarUsuario = async (req, res = response) => {
             uid
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,

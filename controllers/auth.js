@@ -34,7 +34,7 @@ const login = async (req, res = response) => {
                 token
             } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -62,7 +62,7 @@ const loginGoogle = async (req, res = response) => {
             token // { name, email, picture }
         } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -71,7 +71,29 @@ const loginGoogle = async (req, res = response) => {
     }
 }
 
+const renew = async (req, res = response) => {
+    try {
+        const uid = req.uid;
+
+        // Generar el Token (JWT)!
+        const token = await generarJWT(uid);
+
+        res.json( {
+            ok: true,
+            token
+        } );
+    } catch (eError) {
+        console.warn(eError);
+        res.status(500)
+            .json( {
+                ok: false,
+                msg: 'renew() - Error!'
+            } );
+    }
+}
+
 module.exports = {
     login,
-    loginGoogle
+    loginGoogle,
+    renew
 }

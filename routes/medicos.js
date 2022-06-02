@@ -27,6 +27,8 @@ router.put(
     [ // Arreglo de Middlewares!
         validarJWT,
         check('nombre', 'El Nombre es obligatorio.').not().isEmpty(),
+        check('hospital', 'El Hospital es obligatorio.').not().isEmpty(),
+        check('hospital', 'El Hospital debe tener un Id con formato correcto.').isMongoId(),
         //check('img', 'La ruta del archivo es obligatoria.').not().isEmpty(),
         validarCampos,
     ],

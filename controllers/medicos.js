@@ -13,7 +13,7 @@ const getMedicos = async (req, res = response) => {
             medicos
         } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -30,15 +30,13 @@ const crearMedico = async (req, res = response) => {
           } );
     
         await medico.save();
-
-        // TODO: Validar Token y comprobar Usuario correcto!
     
         res.json( {
             ok: true,
             medico
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -48,9 +46,9 @@ const crearMedico = async (req, res = response) => {
 };
 
 const actualizarMedico = async (req, res = response) => {
-    const id = req.params.id;
-
     try {
+        const id = req.params.id,
+            uid = req.uid;
         const medicoDB = await Medico.findById( id );
 
         if (!medicoDB)
@@ -60,11 +58,9 @@ const actualizarMedico = async (req, res = response) => {
                     msg: `No se encuentra el Médico id=${id}.`
                 } );
 
-        // TODO: Validar Token y comprobar Usuario correcto!
-
         // Actualizaciones!
-        const campos = req.body;
-        //const medicoActualizado = await Medico.findByIdAndUpdate(id, campos, { new: true } );
+        const campos = { ...req.body, uid };
+        const medicoActualizado = await Medico.findByIdAndUpdate(id, campos, { new: true } );
 
         res.json( {
             ok: true,
@@ -72,7 +68,7 @@ const actualizarMedico = async (req, res = response) => {
             id
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -94,9 +90,7 @@ const borrarMedico = async (req, res = response) => {
                     msg: `No se encuentra el Médico id=${id}.`
                 } );
 
-        // TODO: Validar Token y comprobar Usuario correcto!
-
-        //await Medico.findByIdAndDelete(id);
+        await Medico.findByIdAndDelete(id);
 
         res.json( {
             ok: true,
@@ -104,7 +98,7 @@ const borrarMedico = async (req, res = response) => {
             id
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,

@@ -32,7 +32,7 @@ const getTodo = async (req, res = response) => {
             medicos
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -81,7 +81,7 @@ const getDocumentosColeccion = async (req, res = response) => {
             resultado
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,

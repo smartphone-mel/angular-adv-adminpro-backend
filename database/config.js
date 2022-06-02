@@ -12,7 +12,7 @@ const dbConnection = async () => {
         
         console.log('MongoDB conectado!');
     } catch (eError) {
-        console.log(eError);
+        console.error(eError);
         throw new Error('Error a la hora de conectarse al MongoDB.');
     }
 }

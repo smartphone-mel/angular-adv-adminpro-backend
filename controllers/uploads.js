@@ -41,7 +41,7 @@ const fileUpload = async (req, res = response) => {
         // Use the mv() method to place the file somewhere on your server
         file.mv(uploadPath, (eError) => {
             if (eError) {
-                console.error(eError);
+                console.warn(eError);
                 return res.status(500).json( {
                     ok: false,
                     msg: 'Error al subir el archivo.'
@@ -58,7 +58,7 @@ const fileUpload = async (req, res = response) => {
               } );
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -87,7 +87,7 @@ const obtenerImagen = async (req, res = response) => {
 
         res.sendFile(pathImagen);
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,

@@ -12,7 +12,7 @@ const getHospitales = async (req, res) => {
             hospitales
         } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -29,15 +29,13 @@ const crearHospital = async (req, res = response) => {
           } );
     
         await hospital.save();
-
-        // TODO: Validar Token y comprobar Usuario correcto!
     
         res.json( {
             ok: true,
             hospital
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -47,9 +45,9 @@ const crearHospital = async (req, res = response) => {
 };
 
 const actualizarHospital = async (req, res = response) => {
-    const id = req.params.id;
-
     try {
+        const id = req.params.id,
+            uid = req.uid;
         const hospitalDB = await Hospital.findById( id );
 
         if (!hospitalDB)
@@ -59,11 +57,9 @@ const actualizarHospital = async (req, res = response) => {
                     msg: `No se encuentra el Hospital id=${id}.`
                 } );
 
-        // TODO: Validar Token y comprobar Usuario correcto!
-
         // Actualizaciones!
-        const campos = req.body;
-        //const hospitalActualizado = await Hospital.findByIdAndUpdate(id, campos, { new: true } );
+        const campos = { ...req.body, uid };
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, campos, { new: true } );
 
         res.json( {
             ok: true,
@@ -71,7 +67,7 @@ const actualizarHospital = async (req, res = response) => {
             id
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
@@ -93,9 +89,7 @@ const borrarHospital = async (req, res = response) => {
                     msg: `No se encuentra el Hospital id=${id}.`
                 } );
 
-        // TODO: Validar Token y comprobar Usuario correcto!
-
-        //await Hospital.findByIdAndDelete(id);
+        await Hospital.findByIdAndDelete(id);
 
         res.json( {
             ok: true,
@@ -103,7 +97,7 @@ const borrarHospital = async (req, res = response) => {
             id
           } );
     } catch (eError) {
-        console.error(eError);
+        console.warn(eError);
         res.status(500)
             .json( {
                 ok: false,
