@@ -8,12 +8,25 @@
     <meta name="google-signin-client_id" content="1021933953816-kob6db68mg9v29l2s3qkrvlvptfhbfuv.apps.googleusercontent.com">
     <title>Demo Web</title>
 
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <style>
+        body {
+            padding-left: 12px;
+        }
+        .g-signout2--custom {
+            margin-left: 8px;
+        }
+    </style>
+
+    <script src="https://apis.google.com/js/platform.js" async defer crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Google Sign in</h1>
-    <div class="g-signin2" data-onsuccess="onSignIn" onclick="ClickLoginLogout()" data-theme="dark"></div>
-    <a href="#" onclick="signOut();">Sign out</a>
+    <h1>Demo Web</h1>
+    <h2>Google Sign in</h2>
+    <div class="g-signin2" data-theme="dark" onclick="ClickLoginLogout()"
+            data-onsuccess="onSignIn" data-onfailure="onFailure"
+        ></div>
+    <br />
+    <a class="g-signout2--custom" href="#" onclick="signOut();">Sign out</a>
     <!-- jsScripts! -->
     <script>
         var clicked = false;
@@ -23,25 +36,57 @@
         }
 
         var onSignIn = function (googleUser) {
-            if (clicked) {
-                var profile = googleUser.getBasicProfile();
+            try {
+                if (clicked) {
+                    var profile = googleUser.getBasicProfile();
 
-                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-                console.log('Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
-                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+                    // Do not send to your backend! Use an ID token instead.
+                    console.log('ID: ' + profile.getId());
+                    console.log('Name: ' + profile.getName());
+                    console.log('Given Name: ' + profile.getGivenName());
+                    console.log('Family Name: ' + profile.getFamilyName());
+                    console.log('Image URL: ' + profile.getImageUrl());
+                    // This is null if the 'email' scope is not present.
+                    console.log('Email: ' + profile.getEmail());
 
-                var id_token = googleUser.getAuthResponse().id_token;
-                console.log(id_token);
+                    var id_token = googleUser.getAuthResponse().id_token;
+                    console.log(id_token);
+                }
+            } catch (eError) {
+                console.warn(eError.error);
+            }
+        }
+
+        var onFailure = function (gError) {
+            try {
+                if (clicked)
+                    console.info(`Google Failure! Error: ${gError.error}`);
+            } catch (eError) {
+                console.warn(eError.error);
             }
         }
 
         var signOut = function () {
-            var auth2 = gapi.auth2.getAuthInstance();
+            try {
+                /*if (typeof module_google_login == 'undefined')
+                    console.warn('User cannot sign out.');
+                else*/
+                if (gapi && gapi.auth2 && gapi.auth2.init && typeof gapi.auth2.init === 'function' )
+                    gapi.auth2.init().then( function () {
+                        var auth2 = gapi.auth2.getAuthInstance();
 
-            auth2.signOut().then( function () {
-                console.log('User signed out.');
-                } );
+                        if (auth2 && auth2.signOut && typeof auth2.signOut === 'function')
+                            auth2.signOut().then( function () {
+                                console.log('User signed out.');
+                            } );
+                        else
+                            console.info('auth2.signOut() - User cannot sign out.');
+                    } );
+                else
+                    console.info('gapi.auth2.init() - User cannot sign out.');
+            } catch (eError) {
+                console.warn(eError.error);
+            }
         }
     </script>
 </body>

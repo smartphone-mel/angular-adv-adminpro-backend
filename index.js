@@ -21,10 +21,10 @@ app.use( express.json() );
 dbConnection();
 
 // Directorio public (levantar la webPage de ese directorio)!
-//app.use( express.static('public') );
+app.use( express.static('public') );
 
 // Rutas!
-app.get( '/', (req, res) => {
+app.get( '/api', (req, res) => {
     res//.status(400)
       .json( {
         ok: true,

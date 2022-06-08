@@ -49,18 +49,31 @@ const loginGoogle = async (req, res = response) => {
 
         // Descontinuado!!!
         // NOTA: puedo checkear si existe el email en la tabla 'usuarios', y agregarlo o validar acceso!
-        /*const { name, email, picture } = await googleVerify(token).catch( (eError) => {
+        const {
+            name,
+            email,
+            picture,
+            error
+          } = await googleVerify(token).catch( (eError) => {
             return res.status(401)
                 .json( {
                     ok: false,
-                    msg: 'Token inválido.'
+                    msg: 'Error no controlado al verificar Token. Posiblemente token inválido.',
+                    error: eError
                 } );
-          } );*/
+          } );
 
-        res.json( {
-            ok: true,
-            token // { name, email, picture }
-        } );
+        if (error)
+            return res.status(401).json( {
+                ok: false,
+                msg: 'Error controlado al verificar Token. Posiblemente token inválido.',
+                error // token
+              } );
+        else
+            return res.json( {
+                ok: true,
+                name, email, picture // token
+              } );
     } catch (eError) {
         console.warn(eError);
         res.status(500)
