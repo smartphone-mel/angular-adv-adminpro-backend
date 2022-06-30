@@ -67,6 +67,20 @@ const fileUpload = async (req, res = response) => {
     }
 }
 
+const obtenerImagenDefault = async (req, res = response) => {
+    try {
+        let pathImagen = path.join(__dirname, `../uploads/no-image-available.jpg`);
+        res.sendFile(pathImagen);
+    } catch (eError) {
+        console.warn(eError);
+        res.status(500)
+            .json( {
+                ok: false,
+                msg: 'obtenerImagenDefault() - Error!'
+            } );
+    }
+}
+
 const obtenerImagen = async (req, res = response) => {
     try {
         const tiposValidos = ['usuarios', 'medicos', 'hospitales'],
@@ -83,7 +97,7 @@ const obtenerImagen = async (req, res = response) => {
         let pathImagen = path.join(__dirname, `../uploads/${tabla}/${imagen}`);
 
         if ( !fs.existsSync(pathImagen) )
-                pathImagen = path.join(__dirname, `../uploads/no-image-available.png`);
+            pathImagen = path.join(__dirname, `../uploads/no-image-available.jpg`);
 
         res.sendFile(pathImagen);
     } catch (eError) {
@@ -98,5 +112,6 @@ const obtenerImagen = async (req, res = response) => {
 
 module.exports = {
     fileUpload,
+    obtenerImagenDefault,
     obtenerImagen
 }
