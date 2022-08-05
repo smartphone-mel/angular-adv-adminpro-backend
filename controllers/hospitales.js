@@ -5,7 +5,7 @@ const getHospitales = async (req, res) => {
     try {
         /*const hospitales = await Hospital.find( {}, 'nombre img usuario' );*/
         const hospitales = await Hospital.find()
-            .populate('usuario', 'nombre apellido');
+            .populate('usuario', 'nombre apellido img');
 
         res.json( {
             ok: true,
