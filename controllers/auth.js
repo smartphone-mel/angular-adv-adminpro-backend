@@ -3,6 +3,7 @@ const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
+const { getMenuNav } = require('../helpers/menu-nav');
 
 const login = async (req, res = response) => {
     try {
@@ -32,7 +33,8 @@ const login = async (req, res = response) => {
         res.json( {
                 ok: true,
                 token,
-                usuario: usuarioDB
+                usuario: usuarioDB,
+                menu: getMenuNav(usuarioDB.role)
             } );
     } catch (eError) {
         console.warn(eError);
@@ -105,7 +107,8 @@ const renew = async (req, res = response) => {
         res.json( {
             ok: true,
             token,
-            usuario
+            usuario,
+            menu: getMenuNav(usuario.role)
         } );
     } catch (eError) {
         console.warn(eError);
