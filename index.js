@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const { dbConnection } = require('./database/config');
@@ -38,6 +39,11 @@ app.use('/api/hospitales', require('./routes/hospitales') );
 app.use('/api/medicos', require('./routes/medicos') );
 app.use('/api/uploads', require('./routes/uploads') );
 app.use('/api/login', require('./routes/auth') );
+
+// Para prod.
+app.get( '*', (req, res) => {
+  res.sendFile( path.resolve(__dirname, 'public/index.html') );
+} );
 
 app.listen(process.env.ADMINPRO_PORT, () => {
     console.log(`Servidor corriendo en puerto ${process.env.ADMINPRO_PORT}!`);
